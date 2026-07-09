@@ -1,4 +1,4 @@
-# Full Attack Lifecycle Investigation — Blue Team Report
+# Full Attack Lifecycle Investigation - Blue Team Report
 
 This is a project from the Technion Cyber Defense & Offense Program. The assignment was to run a realistic attack against a Windows VM, start to finish, and then go back and reconstruct the whole thing using nothing but log evidence — no notes, no memory of what I'd done, just Sysmon, Windows Event Logs, and Splunk.
 
