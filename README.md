@@ -1,10 +1,10 @@
 # Full Attack Lifecycle Investigation - Blue Team Report
 
-This is a project from the Technion Cyber Defense & Offense Program. The assignment was to run a realistic attack against a Windows VM, start to finish, and then go back and reconstruct the whole thing using nothing but log evidence — no notes, no memory of what I'd done, just Sysmon, Windows Event Logs, and Splunk.
+This is a project from the Technion Cyber Defense & Offense Program. The assignment was to run a realistic attack against a Windows VM, start to finish, and then go back and reconstruct the whole thing using nothing but log evidence - no notes, no memory of what I'd done, just Sysmon, Windows Event Logs, and Splunk.
 
 I built the attack myself: phishing lure, payload, a Meterpreter shell, credential dumping, a scheduled task for persistence, and a simulated exfiltration. Then I sat down as if I were the analyst who'd just been handed this incident cold, and worked backward through the logs until the whole story matched what I actually did.
 
-The original lab VMs are long gone at this point (it's been about a year), so what's below is written from the incident report I submitted at the time, plus the screenshots I captured along the way. The full original report is also in this repo if you want the more detailed academic version — see the link at the bottom.
+The original lab VMs are long gone at this point (it's been about a year), so what's below is written from the incident report I submitted at the time, plus the screenshots I captured along the way. The full original report is also in this repo if you want the more detailed academic version - see the link at the bottom.
 
 I'm currently building a follow-up to this, a home lab using Sysmon and Atomic Red Team to test detections against specific MITRE ATT&CK techniques, partly because writing this report is what convinced me EDR was the missing piece (more on that below).
 
@@ -27,12 +27,12 @@ I mapped each stage to MITRE ATT&CK afterward, since that's the vocabulary this 
 | Phase | What I did | Tool | ATT&CK Technique |
 |---|---|---|---|
 | Initial Access | Phishing email pointing to a malicious executable | Simulated email | T1566 – Phishing |
-| Execution | Victim downloads and runs `SecurityApproval.exe` | msfvenom payload | T1204 – User Execution |
-| Command & Control | Reverse shell back to my attacker box on port 5555 | Metasploit / Meterpreter | T1071 – Application Layer Protocol |
+| Execution | Victim downloads and runs `SecurityApproval.exe` | msfvenom payload | T1204 - User Execution |
+| Command & Control | Reverse shell back to my attacker box on port 5555 | Metasploit / Meterpreter | T1071 - Application Layer Protocol |
 | Credential Access | Dumped credentials straight from memory via Meterpreter's `kiwi` module (no separate `mimikatz.exe` process) | Mimikatz | T1003.001 – LSASS Memory |
 | Persistence | Scheduled task to re-run a second payload (`WinHelper.exe`) at logon | `schtasks.exe` | T1053.005 – Scheduled Task |
 | Defense Evasion | Stuck to built-in tools like PowerShell and `cmd.exe` rather than custom binaries | Living-off-the-land | T1218 – System Binary Proxy Execution |
-| Exfiltration | Simulated file transfer out via PowerShell | PowerShell | T1041 – Exfiltration Over C2 Channel |
+| Exfiltration | Simulated file transfer out via PowerShell | PowerShell | T1041 - Exfiltration Over C2 Channel |
 
 ### Getting in
 
@@ -114,7 +114,7 @@ I pulled logs from three places and cross-referenced them: Sysmon for the endpoi
 
 A few gaps I'd close if I ran this again:
 
-- Turn on Sysmon Event IDs 7 and 10 (image load and process access) — I didn't have full visibility into DLL loading or process injection, and it showed.
+- Turn on Sysmon Event IDs 7 and 10 (image load and process access) - I didn't have full visibility into DLL loading or process injection, and it showed.
 - Real-time alerting on writes to the `Run` key instead of only catching it after the fact.
 - The big one: an actual EDR platform. I ran this whole exercise with Defender switched off, which was necessary for the payload to work, but it's also exactly the point. Signature-based AV was never going to catch in-memory credential access or living-off-the-land behavior like this. This is the recommendation that's shaped what I'm working on now.
 - Application control to stop unsigned executables running from user-writable folders.
@@ -130,6 +130,6 @@ The EDR recommendation above turned into an actual project: I'm building a home 
 
 ---
 
-**Full original report:** [full-report.docx](full-report.docx) — the complete academic write-up this project is based on.
+**Full original report:** [full-report.docx](full-report.docx) - the complete academic write-up this project is based on.
 
 *Technion Cyber Defense & Offense Implementation Program, Blue Team track. Tools: Kali Linux, Metasploit, Mimikatz, Sysmon, Splunk Enterprise, EvtxECmd.*
